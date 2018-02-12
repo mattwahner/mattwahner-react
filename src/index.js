@@ -13,8 +13,15 @@ import App from './App';
 import 'semantic-ui-css/semantic.min.css';
 import registerServiceWorker from './registerServiceWorker';
 
+const initState = {};
+
+if (localStorage.token) {
+    initState.user = { token: localStorage.token };
+}
+
 const store = createStore(
     rootReducer,
+    initState,
     composeWithDevTools(applyMiddleware(thunk))
 );
 

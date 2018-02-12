@@ -13,8 +13,10 @@ class LoginForm extends React.Component {
 
     onSubmit = () => {
         this.setState({loading: true});
-        this.props.onSubmit(this.state.password)
-            .catch(err => this.setState({ error: err.message, loading: false }));
+        this.props.onLogin(this.state.password)
+            .catch(error => {
+                this.setState({ error, loading: false })
+            });
     };
 
     render() {
@@ -41,11 +43,12 @@ class LoginForm extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    onSubmit: login(dispatch)
+    onLogin: (password) => dispatch(login(password))
 });
 
+
 LoginForm.propTypes = {
-    onSubmit: PropTypes.func.isRequired
+    onLogin: PropTypes.func.isRequired
 };
 
 export default connect(null, mapDispatchToProps)(LoginForm);
