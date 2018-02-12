@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { login } from "../../actions/auth";
+import { login } from "../actions/auth";
 import { Button, Form, Message } from "semantic-ui-react";
 
 class LoginForm extends React.Component {

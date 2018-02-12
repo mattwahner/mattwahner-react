@@ -12,11 +12,13 @@ import App from './App';
 
 import 'semantic-ui-css/semantic.min.css';
 import registerServiceWorker from './registerServiceWorker';
+import { setAuthorizationHeader } from "./utils";
 
 const initState = {};
 
 if (localStorage.token) {
     initState.user = { token: localStorage.token };
+    setAuthorizationHeader(localStorage.token);
 }
 
 const store = createStore(
