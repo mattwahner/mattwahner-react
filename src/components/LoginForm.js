@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { login } from "../actions/auth";
-import { Button, Form, Message } from "semantic-ui-react";
+import {Button, Form, Message} from "semantic-ui-react";
 
 class LoginForm extends React.Component {
     state = {
@@ -28,15 +28,13 @@ class LoginForm extends React.Component {
                         <p>{ this.state.error }</p>
                     </Message>
                 }
-                <Form.Field>
-                    <label>Password</label>
-                    <input
+
+                    <Form.Input
                         type="password"
-                        value={ this.state.password }
+                        label="Password"
                         onChange={ e => this.setState({ password: e.target.value }) }
+                        action={ <Button color="blue" >Login</Button> }
                     />
-                </Form.Field>
-                <Button type="submit" primary>Login</Button>
             </Form>
         );
     }

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { logout } from "../actions/auth";
 import {Button, Card, Form, Grid, Message} from "semantic-ui-react";
 import {createMessage, fetchMessages, setMessage} from "../actions/messages";
 import EditModal from "./EditModal";
@@ -50,23 +49,17 @@ class Dashboard extends React.Component {
         return (
             <Grid>
                 <Grid.Row>
-                    <Grid.Column width={12}>
+                    <Grid.Column width={16}>
                         <Form onSubmit={this.createSubmit} loading={this.state.loading}>
-                            <Form.Group>
-                                <Form.Field>
-                                    <input
-                                        type="text"
-                                        placeholder="Location"
-                                        onChange={e => this.setState({ arb: e.target.value })}
-                                        value={this.state.arb}
-                                    />
-                                </Form.Field>
-                                <Button type="submit" primary>Create</Button>
-                            </Form.Group>
+                            <Form.Input
+                                type="text"
+                                placeholder="Location"
+                                onChange={e => this.setState({ arb: e.target.value })}
+                                value={this.state.arb}
+                                label="Create a location"
+                                action={ <Button primary>Create</Button> }
+                            />
                         </Form>
-                    </Grid.Column>
-                    <Grid.Column width={4}>
-                        <Button floated="right" onClick={this.props.onLogout} primary>Logout</Button>
                     </Grid.Column>
                 </Grid.Row>
                 { this.state.notification &&
@@ -83,7 +76,7 @@ class Dashboard extends React.Component {
                 }
                 <Grid.Row>
                     <Grid.Column width={16}>
-                        <Card.Group>
+                        <Card.Group centered>
                             { messageCards }
                         </Card.Group>
                     </Grid.Column>
@@ -98,7 +91,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    onLogout: () => dispatch(logout()),
     fetchMessages: () => dispatch(fetchMessages()),
     createMessage: (text) => dispatch(createMessage(text))
 });
@@ -108,7 +100,6 @@ Dashboard.propTypes = {
         id: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired
     })),
-    onLogout: PropTypes.func.isRequired,
     fetchMessages: PropTypes.func.isRequired,
     createMessage: PropTypes.func.isRequired
 };

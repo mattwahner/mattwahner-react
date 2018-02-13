@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import BoardPage from "./components/BoardPage";
+import './app.css';
 
 const App = () => (
     <div>
