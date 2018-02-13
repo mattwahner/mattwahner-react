@@ -2,14 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import {Button, Card, Form, Grid, Message} from "semantic-ui-react";
-import {createMessage, fetchMessages, setMessage} from "../actions/messages";
+import {createMessage, fetchMessages, setMessage, updateMessage} from "../actions/messages";
 import EditModal from "./EditModal";
 
 class Dashboard extends React.Component {
     state = {
         arb: '',
         loading: false,
-        notification: ''
+        notification: '',
+        error: ''
     };
 
     componentDidMount = () => this.props.fetchMessages();
@@ -17,9 +18,24 @@ class Dashboard extends React.Component {
     createSubmit = () => {
         this.setState({ loading: true });
         this.props.createMessage(this.state.arb)
-            .then(() => this.setState({ loading: false }));
+            .then(() => this.setState({ loading: false }))
+            .catch((error) => {
+                this.setState({ loading: false, error });
+                setTimeout(() => {
+                    this.setState({ error: '' })
+                }, 3000);
+            });
         this.setState({ arb: '' });
     };
+
+    onMessageUpdate = (id, text) =>
+        this.props.updateMessage(id, text)
+            .catch((error) => {
+                this.setState({ loading: false, error });
+                setTimeout(() => {
+                    this.setState({ error: '' })
+                }, 3000);
+            });
 
     onMessageSet = text => {
         setMessage(text)
@@ -39,7 +55,7 @@ class Dashboard extends React.Component {
                     <Card.Content>
                         <div className="ui two buttons">
                             <Button basic color="green" onClick={() => this.onMessageSet(message.text)}>Set</Button>
-                            <EditModal id={message.id} text={message.text}/>
+                            <EditModal id={message.id} text={message.text} onUpdate={this.onMessageUpdate}/>
                         </div>
                     </Card.Content>
                 </Card.Content>
@@ -74,6 +90,18 @@ class Dashboard extends React.Component {
                         </Grid.Column>
                     </Grid.Row>
                 }
+                { this.state.error &&
+                <Grid.Row>
+                    <Grid.Column width={16}>
+                        <Message negative>
+                            <Message.Header>
+                                Error
+                            </Message.Header>
+                            <p>{ this.state.error }</p>
+                        </Message>
+                    </Grid.Column>
+                </Grid.Row>
+                }
                 <Grid.Row>
                     <Grid.Column width={16}>
                         <Card.Group centered>
@@ -92,7 +120,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     fetchMessages: () => dispatch(fetchMessages()),
-    createMessage: (text) => dispatch(createMessage(text))
+    createMessage: (text) => dispatch(createMessage(text)),
+    updateMessage: (id, text) => dispatch(updateMessage(id, text))
 });
 
 Dashboard.propTypes = {
@@ -101,7 +130,8 @@ Dashboard.propTypes = {
         text: PropTypes.string.isRequired
     })),
     fetchMessages: PropTypes.func.isRequired,
-    createMessage: PropTypes.func.isRequired
+    createMessage: PropTypes.func.isRequired,
+    updateMessage: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

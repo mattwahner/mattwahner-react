@@ -19,8 +19,8 @@ export default {
             axios.post('/api/board/messages', { text })
                 .then(res => ({ id: res.data._id, text: res.data.text }))
                 .catch(error => {
-                    if (error.response.data)
-                        throw error.response.data;
+                    if (error.response.data.error)
+                        throw error.response.data.error;
                     else
                         throw error.message;
                 }),
@@ -35,7 +35,13 @@ export default {
                         throw error.message;
                 }),
         updateMessage: (id, text) =>
-            axios.put(`/api/board/messages/${id}`, { text }).then(res => ({ id: res.data._id, text: res.data.text })),
+            axios.put(`/api/board/messages/${id}`, { text }).then(res => ({ id: res.data._id, text: res.data.text }))
+                .catch(error => {
+                    if (error.response.data.error)
+                        throw error.response.data.error;
+                    else
+                        throw error.message;
+                }),
         deleteMessage: (id) =>
             axios.delete(`/api/board/messages/${id}`)
     }

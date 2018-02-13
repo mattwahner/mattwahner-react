@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Button, Form, Modal} from "semantic-ui-react";
-import {deleteMessage, updateMessage} from "../actions/messages";
+import {deleteMessage} from "../actions/messages";
 import {connect} from "react-redux";
 
 class EditModal extends React.Component {
@@ -16,6 +16,7 @@ class EditModal extends React.Component {
     updateMessage = () => {
         this.props.onUpdate(this.props.id, this.state.arb)
             .then(this.close());
+        this.setState({ arb: '' });
     };
 
     deleteMessage = () => {
@@ -29,6 +30,7 @@ class EditModal extends React.Component {
                    open={this.state.open}
                    onClose={this.close}
                    trigger={<Button basic color="yellow" onClick={this.open}>Edit</Button>}
+                   closeOnEscape={false}
             >
                 <Modal.Header>
                     Editing...
@@ -55,7 +57,6 @@ class EditModal extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    onUpdate: (id, text) => dispatch(updateMessage(id, text)),
     onDelete: (id) => dispatch(deleteMessage(id))
 });
 
